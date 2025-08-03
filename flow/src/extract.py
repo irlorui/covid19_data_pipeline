@@ -98,7 +98,11 @@ def create_table(conn,
         logging.info(f'Table {table_name} created successfully!')
 
 
-def insert_dataframe(conn, df, schema_name, table_name, chunk_size=1000):
+def insert_dataframe(conn, 
+                     df: pd.DataFrame, 
+                     schema_name: str, 
+                     table_name: str, 
+                     chunk_size: int = 1000):
 
     """
     Inserts data into the DB from a dataframe by chunks. 
@@ -136,7 +140,10 @@ def insert_dataframe(conn, df, schema_name, table_name, chunk_size=1000):
                 logging.info(f'Error inserting data in table {table_name}: {e}')
 
 
-def test_extraction(conn, csv_path, schema_name, table_name):
+def test_extraction(conn, 
+                    csv_path: str, 
+                    schema_name: str, 
+                    table_name: str):
     """
     Tests if the extraction was done correctly by comparing:
       - the number of rows in the DB table
@@ -160,7 +167,9 @@ def test_extraction(conn, csv_path, schema_name, table_name):
         raise Exception (f'Extraction Test failed for table {table_name}')
 
 
-def load_raw_file(csv_file, conn, schema_name = 'raw'):
+def load_raw_file(csv_file: str, 
+                  conn, 
+                  schema_name: str = 'raw'):
 
     """
     Load a single CSV file into the database
