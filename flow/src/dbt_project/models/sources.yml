@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: clinical_trials
+    schema: raw
+    tables:
+      - name: covid_clinical_trials
+        description: "Source data for Covid 19 clinical trial"
