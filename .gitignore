@@ -1,2 +1,3 @@
+airflow_logs/*
 flow/dag/__pycache__
 flow/src/__pycache__
