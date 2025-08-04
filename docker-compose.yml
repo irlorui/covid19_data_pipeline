@@ -12,31 +12,20 @@ services:
       POSTGRES_DB: clinical_trials
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d clinical_trials"]
       interval: 5s
       timeout: 3s
       retries: 10
-  
-  db-init:
-    image: postgres:16-alpine
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./init_db:/init_db
-    entrypoint: >
-      sh -c "
-        sleep 5 && \
-        PGPASSWORD=admin psql -h postgres -U admin -d clinical_trials -a -f /init_db/init.sql
-      "
+
 
   airflow:
     image: apache/airflow:2.7.1
     container_name: airflow
     depends_on:
-      db-init:
-        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
@@ -63,12 +52,15 @@ services:
       interval: 10s
       retries: 10
 
+
   airflow-scheduler:
     image: apache/airflow:2.7.1
     container_name: airflow-scheduler
     depends_on:
       airflow:
         condition: service_healthy
+    ports:
+      - "1234:1234"
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://admin:admin@postgres:5432/clinical_trials
@@ -83,8 +75,11 @@ services:
     command: >
       bash -c "
       pip install --no-cache-dir dbt-postgres==1.7.9 &&
-      airflow scheduler
+      airflow scheduler &&
+      sleep 15 &&
+      airflow dags trigger clinical_trials_pipeline
       "
+
 
 volumes:
   postgres_data:
