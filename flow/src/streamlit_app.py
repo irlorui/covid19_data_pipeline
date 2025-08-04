@@ -7,8 +7,8 @@ from db_utils import Database
 ## Create DB connection
 db = Database(
     dbname="clinical_trials",
-    user="admin",
-    password="admin",
+    user="analyst",
+    password="analyst",
     host="localhost",
     port=5432
 )
