@@ -104,6 +104,7 @@ CREATE TABLE prod.trial(
     trial_id INTEGER PRIMARY KEY,
     nct_number TEXT NOT NULL,
     started_at DATE NULL,
+    completed_at DATE NULL,
     primary_completed_at DATE NULL, 
     first_posted_at DATE NULL, 
     last_update_posted_at DATE NULL, 
