@@ -51,7 +51,17 @@ Docker is used to manage dependencies and make the pipeline easily portable. The
 
 Even for this small use case, Airflow was chosen due to its scalability and ability to grow with future complexity. 
 
-The pipeline is divided into **three stages**, each mapped to a different schema.
+As mentioned before, Airflow Webserver can be accessed by user once the Docker container have been initialized. 
+Just access [http://localhost:8080](http://localhost:8080). After prompting **User and password**  (both `admin`) you should see something like this:
+
+![Airflow UI](./images/airflow_ui.png)
+
+The pipeline is divided into **three tasks**, each mapped to a different schema.
+
+Here is a proof that the pipeline was correctly executed:
+
+![Airflow UI Executed DAG](./images/airflow_ui_executed_dag.png)
+
 
 #### Extract
 
@@ -104,7 +114,11 @@ The final `prod` schema on the DB was designed with the main purpose of answerin
 
 Other data that might be useful was left out of the final schema since it was not the scope ot this pipeline design exercise.
 
-The DB schema design can be seen [here](https://drive.google.com/file/d/1lqR85iQlu4p_BjoyYy3lPRH_zLqXvT7N/view?usp=sharing):
+The DB schema design can be seen [here](https://drive.google.com/file/d/1lqR85iQlu4p_BjoyYy3lPRH_zLqXvT7N/view?usp=sharing). 
+Alternatively, you can check out this screenshot
+
+![db_schema](./images/db_schema.png)
+
 
 This design was the result of the exploratory analysis done on the `raw` schema with the loaded data, that showed some nullables columns,
 1 to N relations, fields that needed standarizations, etc.
