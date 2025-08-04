@@ -1,0 +1,11 @@
+clinical_trial:
+  target: clinical_trial
+  outputs:
+    clinical_trial:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: etl
+      pass: etl
+      dbname: clinical_trials
+      schema: prod

@@ -1,0 +1,239 @@
+
+version: 2
+
+models:
+  - name: stg_phase
+    columns:
+      - name: phase_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: phase_name
+  - name: stg_study_type
+    columns:
+      - name: study_type_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: study_type_name
+  - name: stg_country
+    columns:
+      - name: country_id 
+        tests:
+          - unique
+          - not_null 
+      - name: country_name
+        tests:
+          - not_null        
+  - name: lst_conditions
+    columns:
+      - name: source_condition
+      - name: condition
+  - name: stg_condition
+    columns:
+      - name: condition_name
+      - name: condition_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_trial
+    columns:
+      - name: trial_id
+        tests:
+          - unique
+          - not_null
+      - name: nct_number
+        tests:
+          - unique
+          - not_null      
+      - name: started_at
+      - name: primary_completed_at
+      - name: completed_at
+      - name: first_posted_at
+      - name: last_update_posted_at
+      - name: enrollment
+      - name: study_type_id
+        tests:
+          - relationships:
+              to: staging.stg_study_type
+              field: study_type_id
+      - name: phase_id
+        tests:
+          - relationships:
+              to: staging.stg_phase
+              field: phase_id
+      - name: acronym
+      - name: title
+  - name: stg_trial_condition
+    columns:
+      - name: trial_condition_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: staging.stg_trial
+              field: trial_id
+      - name: condition_id
+        tests:
+          - relationships:
+              to: staging.stg_condition
+              field: condition_id
+  - name: stg_trial_country
+    columns:
+      - name: trial_country_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: staging.stg_trial
+              field: trial_id
+      - name: country_id
+        tests:
+          - relationships:
+              to: staging.stg_country
+              field: country_id
+  - name: stg_trial_intervention
+    columns:
+      - name: trial_intervention_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: staging.stg_trial
+              field: trial_id
+      - name: intervention_id
+        tests:
+          - relationships:
+              to: staging.stg_intervention
+              field: intervention_id
+  - name: stg_intervention
+    columns:
+      - name: intervention_name
+      - name: intervention_id
+        tests:
+          - unique
+          - not_null
+  - name: phase
+    columns:
+      - name: phase_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: phase_name
+  - name: study_type
+    columns:
+      - name: study_type_id
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+      - name: study_type_name
+  - name: country
+    columns:
+      - name: country_id 
+        tests:
+          - unique
+          - not_null 
+      - name: country_name
+        tests:
+          - not_null
+  - name: condition
+    columns:
+      - name: condition_name
+      - name: condition_id
+        tests:
+          - unique
+          - not_null
+  - name: trial
+    columns:
+      - name: trial_id
+        tests:
+          - unique
+          - not_null
+      - name: nct_number
+        tests:
+          - unique
+          - not_null      
+      - name: started_at
+      - name: primary_completed_at
+      - name: completed_at
+      - name: first_posted_at
+      - name: last_update_posted_at
+      - name: interventions
+      - name: enrollment
+      - name: study_type_id
+        tests:
+          - relationships:
+              to: prod.study_type
+              field: study_type_id
+      - name: phase_id
+        tests:
+          - relationships:
+              to: prod.phase
+              field: phase_id
+      - name: acronym
+      - name: title
+  - name: trial_condition
+    columns:
+      - name: trial_condition_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: prod.trial
+              field: trial_id
+      - name: condition_id
+        tests:
+          - relationships:
+              to: prod.condition
+              field: condition_id
+  - name: trial_country
+    columns:
+      - name: trial_country_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: prod.trial
+              field: trial_id
+      - name: country_id
+        tests:
+          - relationships:
+              to: prod.country
+              field: country_id
+  - name: trial_intervention
+    columns:
+      - name: trial_intervention_id
+        tests:
+          - unique
+          - not_null
+      - name: trial_id
+        tests:
+          - relationships:
+              to: prod.trial
+              field: trial_id
+      - name: intervention_id
+        tests:
+          - relationships:
+              to: prod.intervention
+              field: intervention_id
+  - name: intervention
+    columns:
+      - name: intervention_name
+      - name: intervention_id
+        tests:
+          - unique
+          - not_null          

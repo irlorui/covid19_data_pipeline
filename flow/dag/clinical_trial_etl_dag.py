@@ -25,7 +25,26 @@ with DAG(dag_id='clinical_trial_etl',
 
     t_extract_data = extract_data()
 
+    @task(task_id='transform_data')
+    def transform_data():
+        from src.execute_dbt import run_dbt_command
+        run_dbt_command(dbt_command= 'run',
+                        models_path = 'models/staging')
+        
+        run_dbt_command(dbt_command= 'test',
+                        models_path = 'models/staging')
+
+    t_transform_data = transform_data()
+    
+    @task(task_id='load_data')
+    def load_data():
+        from src.execute_dbt import run_dbt_command
+        run_dbt_command(dbt_command= 'run',
+                        models_path = 'models/prod')
+
+    t_load_data = load_data()
+
     end = EmptyOperator(task_id="end")
 
-    start >> t_extract_data >> end
+    start >> t_extract_data >> t_transform_data >> t_load_data >> end
 
