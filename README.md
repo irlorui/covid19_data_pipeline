@@ -20,6 +20,7 @@ The goal is to ensure **traceability**, **data quality**, and a **clean, reprodu
 ## 📂 2. Project Structure
 
 - **airflow_logs**: Docker-mounted volume for saving Airflow logs.
+- **analytical_report**: PDF with the Streamlit analytical report
 - **data**: folder with the raw CSV file [COVID-19 Clinical Trials dataset](https://www.kaggle.com/datasets/parulpandey/covid19-clinical-trials-dataset), downloaded from Kaggle.
 - **init_db**: PostgreSQL init script (roles, users, schemas, production tables)
 - **flow**: 
@@ -28,6 +29,7 @@ The goal is to ensure **traceability**, **data quality**, and a **clean, reprodu
     - `extract.py`: extract all the CSV files in **data** folder by batches and load them in database on schema `raw`.
     - `execute_dbt.py`: execute the DBT commands to transform, test and load the source data.
     - **dbt_project** DBT project with models, tests and profiles for the pipeline Transformation and Load.
+    - `streamlit_app.py`: creates the dynamic report with the expected analysis.
 - **docker-compose.yml**: containers definition to execute the pipeline:
     - `postgres`: creates a postgres DB and initiatializes it with the `init_db/init.sql` script
     - `airflow`: webserver with DAG UI access at [http://localhost:8080](http://localhost:8080). **User and password** are both `admin`.
@@ -101,6 +103,12 @@ In this case, data from `staging` tables are moved to `prod` tables incrementall
 be able to work with the restrictions (PK, FK, data types) of the tables already created in the Postgres database.
 
 
+### Report
+
+Unfortunetely, the dynamic report created with Streamlit was not included in the Docker, so it will not be executed directly.
+
+A printed version can be found on the **analytical_report** folder.
+
 ### 3. Database design
 
 The final `prod` schema on the DB was designed with the main purpose of answering the **expected analytics**:
@@ -168,6 +176,13 @@ Remember after Airflow-webserver is initialized, you can visit the Airflow UI at
 
 
 The pipeline (`clinical_trial_etl`) will be triggered automatically by the trigger-dag service and you will be able to follow the execution of each step.
+
+
+As mentioned before, the dynamic report created with Streamlit was not included in the Docker, so it will not be executed directly. For the user to interact with it, it should be executed manually. To do that:
+
+```bash
+streamlit run flow/src/streamlit_app.py 
+```
 
 --- 
 
@@ -239,6 +254,8 @@ What security measures would you implement for sensitive clinical data?
 
 ## 📎 Future Improvements
 
-- Streamlit dashboard for reporting.
+- Streamlit dashboard:
+  - Improve visuals
+  - Added to docker container so it can be executed by user
 - Extend extraction scope to consider data from multiple sources besides CSV files; JSON APIs, SQL databases, plain text files, etc.
 - Include data quality tests on production
