@@ -3,7 +3,7 @@ clinical_trial:
   outputs:
     clinical_trial:
       type: postgres
-      host: localhost ## to change
+      host: postgres
       port: 5432
       user: etl
       pass: etl

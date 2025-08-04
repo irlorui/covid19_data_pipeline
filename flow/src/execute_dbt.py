@@ -22,7 +22,9 @@ def run_dbt_command(dbt_command: str,
     print(f'Executing dbt command: \n {command_args}')
 
     try:
-        result = subprocess.run(command_args, check=True)
+        result = subprocess.run(command_args, 
+                                cwd = '/opt/airflow/src',
+                                capture_output=False)
         print(f"Process {dbt_command} on {models_path} models completed successfully.\n")
     except subprocess.CalledProcessError:
         print(f"Process {dbt_command} on {models_path} models failed.")
